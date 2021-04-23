@@ -45,19 +45,6 @@ class Broadcaster:
             return 
 
         # Creater quaternion vector
-        quat_odom_cam = np.array([trans_mobbase_cam.transform.rotation.x, \
-                                    trans_mobbase_cam.transform.rotation.y, \
-                                    trans_mobbase_cam.transform.rotation.z, \
-                                    trans_mobbase_cam.transform.rotation.w])
-
-        # MTH with position vector equal to zero
-        rt_mat_odom_cam = tf_conversions.transformations.quaternion_matrix(quat_odom_cam)
-
-        # Add position vector to MTH
-        MTH_odom_cam = rt_mat_odom_cam.copy()
-        MTH_odom_cam[0,3] = trans_mobbase_cam.transform.translation.x
-        MTH_odom_cam[1,3] = trans_mobbase_cam.transform.translation.y
-        MTH_odom_cam[2,3] = trans_mobbase_cam.transform.translation.z
         
 
         #print(MTH_odom_cam)
@@ -68,23 +55,6 @@ class Broadcaster:
         #--------------------------------------------------------------------------------#
         # MTH from camera to Alvar marker
 
-        singleMarker = marker_info.markers[0]
-        
-
-        # Creater quaternion vector
-        quat_cam_marker = np.array([singleMarker.pose.pose.orientation.x, \
-                                    singleMarker.pose.pose.orientation.y, \
-                                    singleMarker.pose.pose.orientation.z, \
-                                    singleMarker.pose.pose.orientation.w])
-
-        # MTH with position vector equal to zero
-        rt_mat_cam_marker = tf_conversions.transformations.quaternion_matrix(quat_cam_marker)
-
-        # Add position vector to MTH
-        MTH_cam_marker = rt_mat_cam_marker.copy()
-        MTH_cam_marker[0,3] = singleMarker.pose.pose.position.x
-        MTH_cam_marker[1,3] = singleMarker.pose.pose.position.y
-        MTH_cam_marker[2,3] = singleMarker.pose.pose.position.z
 
         #print(MTH_cam_marker)
         #print("")
@@ -101,16 +71,10 @@ class Broadcaster:
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             rospy.logwarn("Error trying to look for transform")
             return 
-        quat_from_ROS = np.array([trans_base_marker.transform.rotation.x, \
-                                    trans_base_marker.transform.rotation.y, \
-                                    trans_base_marker.transform.rotation.z, \
-                                    trans_base_marker.transform.rotation.w])
-        rt_mat_from_ROS = tf_conversions.transformations.quaternion_matrix(quat_from_ROS)
-        MTH_from_ROS = rt_mat_from_ROS.copy()
-        MTH_from_ROS[0,3] = trans_base_marker.transform.translation.x
-        MTH_from_ROS[1,3] = trans_base_marker.transform.translation.y
-        MTH_from_ROS[2,3] = trans_base_marker.transform.translation.z
+        ## quad
 
+
+        
         print("MTH obtained directly from ROS")
         print(MTH_from_ROS)
         print("")
